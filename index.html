@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>get a health.</title>
+<meta name="description" content="Bangun kebiasaan sehat sedikit-sedikit tiap hari: ceklis harian, latihan napas, jam tidur, Isi Piringku, gerak 5 menit, cek mood, dan kuis harian.">
+<meta name="theme-color" content="#F2F5F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A100D" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=JetBrains+Mono:wght@400..700&family=Plus+Jakarta+Sans:wght@400..800&display=swap">
+<style>[hidden]{display:none!important}</style>
+</head>
+<body><style>
+/* get a health · grand design get it: Bricolage, rasa aplikasi, kapsul "get", warna produk hijau daun.
+   Layout: satu kolom aplikasi, kartu alat di grid, ring progres harian jadi pusat beranda. */
+:root {
+  --bg: #F2F5F3; --panel: #FFFFFF; --panel-2: #F5F8F6; --ink: #0E1A15; --ink-2: #2A3A33; --redup: #5A6A62;
+  --garis-ui: #DDE5E0; --garis-kuat: #C2CFC8; --titik: rgba(14, 26, 21, .07);
+  --merek: #1E8A57; --merek-isi: #23A065; --merek-bg: rgba(35, 160, 101, .12); --merek-tekan: #146B42;
+  --ok: #1E8A57; --ok-bg: #E1F4EA; --bad: #C2362F; --bad-bg: #FBE7E5;
+  --c-pokok: #D99A1E; --c-lauk: #C8553D; --c-sayur: #3E9B5A; --c-buah: #D9578A;
+  --bayang: 0 1px 3px rgba(14, 26, 21, .06); --angkat: 0 14px 34px -16px rgba(14, 26, 21, .3);
+  --f-judul: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --f-teks: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-kode: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0A100D; --panel: #111A16; --panel-2: #17221D; --ink: #E6EEEA; --ink-2: #C3D0C9; --redup: #8A9B93;
+  --garis-ui: #1F2C26; --garis-kuat: #33453C; --titik: rgba(230, 238, 234, .05);
+  --merek: #5ED69A; --merek-isi: #23A065; --merek-bg: rgba(94, 214, 154, .13); --merek-tekan: #0F5A36;
+  --ok: #5ED69A; --ok-bg: rgba(94, 214, 154, .12); --bad: #FF7A70; --bad-bg: rgba(255, 122, 112, .12);
+  --c-pokok: #EDB547; --c-lauk: #E8775F; --c-sayur: #5CC07B; --c-buah: #EE7DA8;
+  --bayang: 0 1px 0 rgba(0, 0, 0, .3); --angkat: 0 18px 40px -18px rgba(0, 0, 0, .7); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0A100D; --panel: #111A16; --panel-2: #17221D; --ink: #E6EEEA; --ink-2: #C3D0C9; --redup: #8A9B93;
+  --garis-ui: #1F2C26; --garis-kuat: #33453C; --titik: rgba(230, 238, 234, .05);
+  --merek: #5ED69A; --merek-isi: #23A065; --merek-bg: rgba(94, 214, 154, .13); --merek-tekan: #0F5A36;
+  --ok: #5ED69A; --ok-bg: rgba(94, 214, 154, .12); --bad: #FF7A70; --bad-bg: rgba(255, 122, 112, .12);
+  --c-pokok: #EDB547; --c-lauk: #E8775F; --c-sayur: #5CC07B; --c-buah: #EE7DA8;
+  --bayang: 0 1px 0 rgba(0, 0, 0, .3); --angkat: 0 18px 40px -18px rgba(0, 0, 0, .7); color-scheme: dark }
+
+* { box-sizing: border-box }
+html { touch-action: manipulation }
+button { touch-action: manipulation; -webkit-tap-highlight-color: transparent }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--f-teks); -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(var(--titik) 1.1px, transparent 1.4px); background-size: 22px 22px; overflow-x: hidden }
+h1, h2, h3 { font-family: var(--f-judul); letter-spacing: -.02em; margin: 0; line-height: 1.1; text-wrap: balance }
+p { margin: 0 }
+a { color: inherit }
+button, input, select, textarea { font: inherit; color: inherit }
+button { cursor: pointer; background: none; border: 0; padding: 0 }
+:focus-visible { outline: 2.5px solid var(--ink); outline-offset: 2px; border-radius: 8px }
+.redup { color: var(--redup) }
+.kecil { font-size: 13px }
+.label { display: inline-flex; align-items: center; gap: 6px; font: 600 11.5px/1 var(--f-kode); letter-spacing: .06em; text-transform: uppercase; color: var(--redup) }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 0 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.spasi { flex: 1 }
+.angka { font-variant-numeric: tabular-nums }
+
+/* logo get it */
+.wm-get { font: 800 21px/1 var(--f-judul); letter-spacing: -.04em; white-space: nowrap; color: var(--ink) }
+.wm-get .kap { display: inline-block; border-radius: .32em; padding: .02em .17em .12em; margin-right: .02em; box-shadow: inset 0 0 0 max(1.5px, .04em) currentColor }
+.wm-get .aks { color: var(--merek) }
+.kecil-wm { font-size: 17px }
+
+.atas { display: flex; align-items: center; gap: 8px; padding: 18px 0 10px }
+.logo { text-decoration: none }
+.nav { display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 14px; scrollbar-width: none }
+.nav::-webkit-scrollbar { display: none }
+.nav a { flex: none; display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--garis-kuat); background: var(--panel); font-size: 13.5px; font-weight: 650; text-decoration: none }
+.nav a[aria-current="page"] { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+.ikon-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: var(--ink-2) }
+.ikon-btn:hover { background: var(--panel-2) }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 12px; font-weight: 700; font-size: 14px; text-decoration: none; border: 1px solid transparent; transition: transform .12s, background .15s }
+.btn.utama { background: var(--ink); color: var(--bg); box-shadow: 0 3px 0 0 color-mix(in srgb, var(--ink) 55%, #000) }
+.btn.merek { background: var(--merek-isi); color: #fff; box-shadow: 0 3px 0 0 var(--merek-tekan) }
+.btn.utama:active, .btn.merek:active { transform: translateY(2px); box-shadow: none }
+.btn.garis { background: var(--panel); border-color: var(--garis-kuat) }
+.btn.garis:hover { border-color: var(--ink) }
+.btn.kecil-btn { min-height: 34px; padding: 0 12px; font-size: 13px; border-radius: 10px }
+.btn:disabled { opacity: .45; cursor: default }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 13px; border-radius: 99px; border: 1px solid var(--garis-kuat); background: var(--panel); font-size: 13px; font-weight: 650 }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+.baris { display: flex; gap: 8px; flex-wrap: wrap; align-items: center }
+
+.kartu { background: var(--panel); border: 1px solid var(--garis-ui); border-radius: 20px; padding: 20px; box-shadow: var(--bayang) }
+.tumpuk { display: grid; gap: 16px }
+.dua { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start }
+@media (max-width: 820px) { .dua { grid-template-columns: minmax(0, 1fr) } }
+.judul-hal { display: grid; gap: 6px; padding: 6px 0 8px }
+.judul-hal h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 800 }
+.judul-hal p { max-width: 62ch; color: var(--ink-2) }
+
+.banner { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 12px 14px; border-radius: 14px; background: var(--merek-bg); font-size: 13.5px }
+.banner b { color: var(--merek) }
+
+/* beranda */
+.hari { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center }
+@media (max-width: 520px) { .hari { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center } }
+.ring { position: relative; width: 148px; height: 148px }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg) }
+.ring .isi-ring { transition: stroke-dashoffset .5s cubic-bezier(.3, .7, .2, 1) }
+.ring .tengah { position: absolute; inset: 0; display: grid; place-content: center; text-align: center }
+.ring .tengah b { font: 800 38px/1 var(--f-judul); letter-spacing: -.03em }
+.cek-list { display: grid; gap: 8px; margin-top: 16px }
+.cek { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 4px 12px 4px 4px; border-radius: 14px; border: 1px solid var(--garis-ui); background: var(--panel-2) }
+.cek-b { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: center; padding: 6px 8px; border-radius: 11px; text-align: left; width: 100% }
+.cek .kotak { width: 30px; height: 30px; border-radius: 9px; border: 2px solid var(--garis-kuat); display: grid; place-items: center; transition: background .15s, border-color .15s }
+.cek-b[aria-pressed="true"] .kotak { background: var(--merek-isi); border-color: var(--merek-isi); color: #fff }
+.cek-b[aria-pressed="true"] .nama { text-decoration: line-through; text-decoration-color: var(--redup) }
+.cek .nama { font-weight: 650 }
+.cek .sub { display: block; font-size: 12.5px; color: var(--redup); font-weight: 500 }
+.cek .tautan { font-size: 12.5px; font-weight: 700; color: var(--merek); text-decoration: none; white-space: nowrap; padding: 8px 4px }
+.minggu { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-top: 12px }
+.minggu .h { display: grid; gap: 6px; justify-items: center; font-size: 11.5px; color: var(--redup); font-family: var(--f-kode) }
+.minggu .bl { width: 100%; aspect-ratio: 1; max-width: 46px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--garis-ui); position: relative; overflow: hidden }
+.minggu .bl i { position: absolute; inset: auto 0 0 0; background: var(--merek-isi) }
+.minggu .ini .bl { outline: 2px solid var(--ink); outline-offset: 1px }
+.streak { display: flex; align-items: baseline; gap: 8px }
+.streak b { font: 800 30px/1 var(--f-judul) }
+
+.alat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px }
+@media (max-width: 760px) { .alat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+.alat { display: grid; gap: 6px; align-content: start; padding: 16px; border-radius: 18px; border: 1px solid var(--garis-ui); background: var(--panel); text-decoration: none; box-shadow: var(--bayang); transition: transform .15s, box-shadow .15s }
+.alat:hover { transform: translateY(-2px); box-shadow: var(--angkat) }
+.alat .ik { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--merek-bg); color: var(--merek) }
+.alat b { font-family: var(--f-judul); font-size: 17px; letter-spacing: -.01em }
+.alat span { font-size: 13px; color: var(--redup); line-height: 1.4 }
+
+/* napas */
+.napas-panggung { display: grid; place-items: center; min-height: 340px; position: relative }
+.lingkar { width: 230px; height: 230px; max-width: 70vw; max-height: 70vw; border-radius: 50%; background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--merek-isi) 55%, #fff) , var(--merek-isi)); transform: scale(.5); display: grid; place-items: center; box-shadow: 0 0 0 14px var(--merek-bg), 0 0 0 30px color-mix(in srgb, var(--merek-bg) 50%, transparent) }
+.lingkar span { transform: scale(2); color: #fff; font: 800 15px/1.2 var(--f-judul); text-align: center }
+.napas-info { display: flex; gap: 18px; justify-content: center; font-family: var(--f-kode); font-size: 13px; color: var(--redup) }
+
+/* tidur */
+.waktu-in { font: 800 34px/1 var(--f-judul); padding: 10px 14px; border-radius: 14px; border: 1px solid var(--garis-kuat); background: var(--panel-2); width: 100%; max-width: 220px }
+.opsi-tidur { display: grid; gap: 8px; margin-top: 14px }
+.ot { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--garis-ui); background: var(--panel-2) }
+.ot.saran { border-color: var(--merek); background: var(--merek-bg) }
+.ot b { font: 800 26px/1 var(--f-judul); font-variant-numeric: tabular-nums }
+.siklus { display: flex; gap: 3px }
+.siklus i { width: 14px; height: 8px; border-radius: 3px; background: var(--garis-kuat) }
+.ot.saran .siklus i { background: var(--merek-isi) }
+.tag { font: 700 11px/1 var(--f-kode); letter-spacing: .04em; text-transform: uppercase; padding: 5px 8px; border-radius: 99px; background: var(--panel); border: 1px solid var(--garis-ui); white-space: nowrap }
+
+/* piring */
+.piring-wrap { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 22px; align-items: center }
+@media (max-width: 600px) { .piring-wrap { grid-template-columns: minmax(0, 1fr); justify-items: center } }
+.piring { width: 100%; max-width: 260px; aspect-ratio: 1 }
+.slider-list { display: grid; gap: 14px; width: 100% }
+.sl { display: grid; gap: 6px }
+.sl label { display: flex; justify-content: space-between; font-weight: 650; font-size: 14px }
+.sl label i { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 8px; vertical-align: -1px }
+.sl input { width: 100%; accent-color: var(--merek-isi) }
+.skor-besar { font: 800 46px/1 var(--f-judul); letter-spacing: -.03em }
+.legenda { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; font-size: 13px }
+.legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 7px }
+
+/* gerak */
+.timer-besar { font: 800 clamp(64px, 16vw, 104px)/1 var(--f-judul); letter-spacing: -.04em; font-variant-numeric: tabular-nums; text-align: center }
+.gerakan-nama { font: 800 26px/1.1 var(--f-judul); text-align: center }
+.bar { height: 12px; border-radius: 99px; background: var(--panel-2); border: 1px solid var(--garis-ui); overflow: hidden }
+.bar i { display: block; height: 100%; background: var(--merek-isi); border-radius: 99px; transition: width .4s }
+.urutan { display: grid; gap: 6px; counter-reset: g }
+.urutan li { list-style: none; display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 10px; border-radius: 12px; font-size: 14px }
+.urutan li::before { counter-increment: g; content: counter(g); font: 700 12px/26px var(--f-kode); text-align: center; border-radius: 8px; background: var(--panel-2); border: 1px solid var(--garis-ui) }
+.urutan li.aktif { background: var(--merek-bg) }
+.urutan li.aktif::before { background: var(--merek-isi); color: #fff; border-color: var(--merek-isi) }
+.urutan small { display: block; color: var(--redup); font-size: 12.5px }
+
+/* mood */
+.wajah { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px }
+.wajah button { display: grid; gap: 6px; justify-items: center; padding: 12px 4px; border-radius: 16px; border: 1px solid var(--garis-ui); background: var(--panel-2); font-size: 12px; font-weight: 650 }
+.wajah button[aria-pressed="true"] { border-color: var(--merek); background: var(--merek-bg) }
+.wajah svg { width: 38px; height: 38px }
+textarea { width: 100%; min-height: 84px; padding: 12px; border-radius: 14px; border: 1px solid var(--garis-kuat); background: var(--panel-2); resize: vertical }
+.grafik-mood { width: 100%; height: 130px }
+.bantuan { border-radius: 18px; padding: 16px; background: var(--panel-2); border: 1px dashed var(--garis-kuat); display: grid; gap: 8px }
+.nomor { font: 800 22px/1 var(--f-judul); letter-spacing: -.01em; user-select: all }
+
+/* belajar dan kuis */
+.pel-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+@media (max-width: 640px) { .pel-list { grid-template-columns: minmax(0, 1fr) } }
+.pel { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--garis-ui); background: var(--panel); text-align: left; width: 100% }
+.pel:hover { border-color: var(--garis-kuat) }
+.pel .no { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; font: 800 15px/1 var(--f-judul); background: var(--panel-2); border: 1px solid var(--garis-ui) }
+.pel.beres .no { background: var(--merek-isi); color: #fff; border-color: var(--merek-isi) }
+.pel b { display: block; font-size: 14.5px }
+.pel small { color: var(--redup); font-size: 12.5px }
+.pemutar { max-width: 640px; margin: 0 auto; display: grid; gap: 16px }
+.prog-pel { display: flex; gap: 4px }
+.prog-pel i { flex: 1; height: 6px; border-radius: 99px; background: var(--garis-ui) }
+.prog-pel i.on { background: var(--merek-isi) }
+.info-kartu h2 { font-size: 26px; margin-bottom: 10px }
+.info-kartu p + p { margin-top: 10px }
+.info-kartu ul { margin: 10px 0 0; padding-left: 20px; display: grid; gap: 6px }
+.soal { font: 700 19px/1.35 var(--f-judul); letter-spacing: -.01em }
+.ops { display: grid; gap: 8px }
+.op { text-align: left; padding: 13px 15px; border-radius: 14px; border: 1.5px solid var(--garis-kuat); background: var(--panel); font-weight: 600; width: 100% }
+.op:hover:not(:disabled) { border-color: var(--ink) }
+.op.benar { border-color: var(--ok); background: var(--ok-bg) }
+.op.salah { border-color: var(--bad); background: var(--bad-bg) }
+.op:disabled { cursor: default }
+.umpan { padding: 12px 14px; border-radius: 14px; font-size: 14px }
+.umpan.ok { background: var(--ok-bg) }
+.umpan.no { background: var(--bad-bg) }
+.sumber { font-size: 12px; color: var(--redup) }
+.sumber a { color: var(--redup) }
+
+.kaki { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--garis-ui); display: grid; gap: 8px; font-size: 13px; color: var(--redup) }
+.kaki .baris { justify-content: space-between }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important } }
+</style>
+
+<div class="wrap">
+  <header class="atas">
+    <a class="logo" href="#beranda" aria-label="get a health, beranda"><span class="wm-get" aria-hidden="true"><span class="kap">get</span> <span class="aks">a</span> health<span class="aks">.</span></span></a>
+    <span class="spasi"></span>
+    <button class="ikon-btn" id="tema" aria-label="Ganti tema terang atau gelap"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  </header>
+  <nav class="nav" id="nav" aria-label="Menu">
+    <a href="#beranda">Hari ini</a>
+    <a href="#napas">Napas</a>
+    <a href="#tidur">Jam tidur</a>
+    <a href="#piring">Isi Piringku</a>
+    <a href="#gerak">Gerak 5 menit</a>
+    <a href="#mood">Cek mood</a>
+    <a href="#belajar">Belajar</a>
+    <a href="#harian">Kuis harian</a>
+  </nav>
+  <main id="hal"></main>
+  <footer class="kaki">
+    <div class="baris"><span class="wm-get kecil-wm"><span class="kap">get</span> <span class="aks">a</span> health<span class="aks">.</span></span><a class="redup" href="../get-it/" style="text-decoration:none">bagian dari <b>get it</b></a></div>
+    <p>Progres kesimpen di browser ini, belum perlu akun. Isi situs ini buat edukasi kebiasaan sehat, bukan pengganti saran dokter, psikolog, atau ahli gizi.</p>
+    <p class="sumber">Acuan: <a href="https://www.who.int/news-room/fact-sheets/detail/physical-activity" target="_blank" rel="noopener">WHO aktivitas fisik</a> · <a href="https://www.cdc.gov/sleep/data-and-statistics/adults.html" target="_blank" rel="noopener">CDC tidur dewasa</a> · <a href="https://keslan.kemkes.go.id/view_artikel/179/pilar-utama-dalam-prinsip-gizi-seimbang" target="_blank" rel="noopener">Kemenkes gizi seimbang</a> · <a href="https://kesprimkom.kemkes.go.id/assets/uploads/contents/others/FAQ_Cegah_Bunuh_Diri%2C_Dukung_Kesehatan_Jiwa__Kenali_Layanan_Healing119.id.pdf" target="_blank" rel="noopener">Kemenkes Healing119</a></p>
+  </footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const hal = $('#hal');
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+/* ---------- tanggal ---------- */
+const pad = n => String(n).padStart(2, '0');
+const tglDari = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const tgl = () => tglDari(new Date());
+const geser = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d };
+const hariKe = () => { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5) };
+const NAMA_HARI = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+/* ---------- penyimpanan (localStorage, aman kalau ditolak) ---------- */
+const KUNCI = 'gahealth1';
+let S;
+function muat() { try { const t = localStorage.getItem(KUNCI); if (t) return JSON.parse(t) } catch (e) {} return null }
+function simpan() { try { localStorage.setItem(KUNCI, JSON.stringify(S)) } catch (e) {} }
+function kosong() { return { cek: {}, air: {}, airTarget: 8, menit: {}, mood: {}, pel: {}, harian: {}, contoh: false } }
+function contoh() {
+  const s = kosong(); s.contoh = true;
+  const pola = [[1,1,1,0,1],[1,0,1,1,1],[0,1,1,1,0],[1,1,0,1,1],[1,1,1,1,1],[0,1,1,0,1]];
+  const mood = [3, 4, 2, 4, 5, 4]; const menit = [30, 10, 35, 0, 45, 20];
+  for (let i = 1; i <= 6; i++) {
+    const k = tglDari(geser(-i)); const p = pola[i - 1];
+    s.cek[k] = {}; KEBIASAAN.forEach((h, j) => { if (p[j]) s.cek[k][h.id] = true });
+    s.menit[k] = menit[i - 1]; s.air[k] = p[3] ? 8 : 5; s.mood[k] = { v: mood[i - 1], c: '' };
+  }
+  s.pel = { tujuh: 3 };
+  return s;
+}
+
+/* ---------- kebiasaan harian ---------- */
+const KEBIASAAN = [
+  { id: 'gerak', nama: 'Gerak 30 menit', sub: 'Jalan kaki juga dihitung', ke: 'gerak' },
+  { id: 'tidur', nama: 'Tidur minimal 7 jam', sub: 'Semalam, dihitung pas bangun', ke: 'tidur' },
+  { id: 'piring', nama: 'Makan ala Isi Piringku', sub: 'Setengah piring sayur dan buah', ke: 'piring' },
+  { id: 'air', nama: 'Minum air sesuai target', sub: '', ke: 'beranda' },
+  { id: 'napas', nama: 'Napas tenang 2 menit', sub: 'Pakai latihan napas', ke: 'napas' }
+];
+const cekHari = (k = tgl()) => (S.cek[k] ||= {});
+const jumlahBeres = (k = tgl()) => KEBIASAAN.filter(h => (S.cek[k] || {})[h.id]).length;
+function tandai(id, nilai = true) { cekHari()[id] = nilai; simpan() }
+function streak() {
+  let n = 0; let i = jumlahBeres() >= 3 ? 0 : 1;
+  for (;; i++) { const k = tglDari(geser(-i)); if (jumlahBeres(k) >= 3) n++; else break; if (n > 999) break }
+  return n;
+}
+
+/* ---------- suara kecil ---------- */
+let AC = null;
+function bunyi(f = 660, dur = .12, vol = .18) {
+  try {
+    AC ||= new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(vol, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + dur);
+    o.connect(g).connect(AC.destination); o.start(); o.stop(AC.currentTime + dur + .02);
+  } catch (e) {}
+}
+
+/* ---------- konten belajar ---------- */
+const K = (q, ops, b, k) => ({ q, ops, b, k });
+const PELAJARAN = [
+  { id: 'tujuh', topik: 'Tidur', judul: 'Kenapa minimal 7 jam?', menit: 3,
+    kartu: [
+      ['Angka acuannya', '<p>Orang dewasa disarankan tidur <b>minimal 7 jam</b> tiap malam. CDC pakai angka ini buat ngukur tidur cukup atau kurang.</p><p>Tidur kurang dari 7 jam terus-terusan dikaitkan sama tekanan darah tinggi, penyakit jantung, dan depresi.</p>'],
+      ['Yang paling ngaruh', '<ul><li><b>Jam bangun yang sama</b> tiap hari, termasuk akhir pekan.</li><li>Kamar gelap, sejuk, dan tenang.</li><li>HP dijauhin pas udah mau tidur.</li></ul><p>Jam bangun lebih gampang dijaga daripada jam tidur, jadi mulai dari situ.</p>']
+    ],
+    soal: [K('Berapa jam tidur minimal yang disarankan buat orang dewasa?', ['7 jam', '5 jam', '6 jam', '10 jam'], 0, 'Acuannya minimal 7 jam per malam buat dewasa.'),
+           K('Mana yang paling gampang dijaga duluan biar tidur teratur?', ['Jam bangun yang sama tiap hari', 'Tidur siang lama', 'Begadang pas akhir pekan', 'Ganti kasur'], 0, 'Jam bangun yang konsisten bantu jam biologis badan.')] },
+  { id: 'kafein', topik: 'Tidur', judul: 'Kopi sore dan tidur malam', menit: 3,
+    kartu: [
+      ['Kafein awet lama', '<p>Separuh kafein dari kopi masih ada di badan sekitar <b>5 jam</b> kemudian (bisa 3 sampai 7 jam, beda tiap orang).</p><p>Di satu studi, kafein yang diminum <b>6 jam sebelum tidur</b> masih bikin waktu tidur berkurang lebih dari 1 jam.</p>'],
+      ['Aturan praktis', '<p>Kalau mau tidur jam 22.00, kopi terakhir paling telat sekitar jam 14.00 sampai 16.00. Teh, minuman berenergi, dan cokelat juga ada kafeinnya.</p>']
+    ],
+    soal: [K('Kira-kira berapa lama separuh kafein masih ada di badan?', ['Sekitar 5 jam', '15 menit', '1 jam', '2 hari'], 0, 'Rata-ratanya sekitar 5 jam, rentangnya 3 sampai 7 jam.'),
+           K('Mau tidur jam 22.00. Jam berapa paling masuk akal buat kopi terakhir?', ['Sekitar 15.00', '21.00', '20.00', '21.30'], 0, 'Kasih jeda sekitar 6 jam atau lebih.')] },
+  { id: 'who', topik: 'Gerak', judul: '150 menit seminggu', menit: 3,
+    kartu: [
+      ['Rekomendasi WHO', '<p>Orang dewasa disarankan aktivitas aerobik <b>150 sampai 300 menit intensitas sedang</b> per minggu, atau <b>75 sampai 150 menit intensitas berat</b>.</p><p>Ditambah latihan kekuatan otot <b>minimal 2 hari</b> seminggu.</p>'],
+      ['Sedang itu kayak gimana?', '<p>Tes ngobrol: pas intensitas sedang kamu masih bisa ngobrol, tapi susah nyanyi. Jalan cepat, sepeda santai, dan beres-beres rumah termasuk.</p><p>150 menit itu cuma 30 menit, 5 hari seminggu.</p>']
+    ],
+    soal: [K('Berapa menit aktivitas intensitas sedang per minggu yang disarankan WHO buat dewasa?', ['150 sampai 300 menit', '30 sampai 60 menit', '500 menit', '10 menit'], 0, 'WHO: 150 sampai 300 menit sedang, atau 75 sampai 150 menit berat.'),
+           K('Latihan kekuatan otot disarankan berapa kali seminggu?', ['Minimal 2 hari', 'Tiap 2 minggu', 'Ga perlu', 'Sebulan sekali'], 0, 'Minimal 2 hari seminggu, libatkan otot-otot besar.'),
+           K('"Masih bisa ngobrol tapi susah nyanyi" nandain intensitas apa?', ['Sedang', 'Ringan banget', 'Berat', 'Istirahat'], 0, 'Itu tes ngobrol buat intensitas sedang.')] },
+  { id: 'sedikit', topik: 'Gerak', judul: 'Tiap gerakan dihitung', menit: 2,
+    kartu: [
+      ['Ga harus sekaligus', '<p>Pedoman WHO 2020 bilang <b>tiap gerakan dihitung</b>. Ga ada lagi syarat minimal 10 menit sekali jalan.</p><p>Naik tangga, jalan ke warung, dan peregangan di sela kerja semuanya nambah.</p>'],
+      ['Kurangi duduk lama', '<p>Duduk lama juga perlu dipecah. Tiap 30 sampai 60 menit, berdiri dan jalan sebentar.</p>']
+    ],
+    soal: [K('Menurut WHO 2020, gerakan di bawah 10 menit...', ['Tetap dihitung', 'Ga dihitung sama sekali', 'Malah bahaya', 'Cuma dihitung buat atlet'], 0, '"Every move counts", tiap gerakan dihitung.')] },
+  { id: 'piring', topik: 'Makan', judul: 'Isi Piringku', menit: 3,
+    kartu: [
+      ['Satu piring dibagi dua', '<p>Pedoman Kemenkes buat sekali makan:</p><ul><li><b>Setengah piring</b> sayur dan buah. Sayur lebih banyak dari buah.</li><li><b>Setengah lagi</b> makanan pokok dan lauk pauk. Makanan pokok sekitar 2/3, lauk sekitar 1/3.</li></ul>'],
+      ['Batas gula, garam, lemak', '<p>Kemenkes ngasih batas per orang per hari: gula <b>50 g</b> (4 sendok makan), garam <b>5 g</b> (1 sendok teh), lemak <b>67 g</b> (5 sendok makan minyak).</p>']
+    ],
+    soal: [K('Di Isi Piringku, sayur dan buah ngisi berapa bagian piring?', ['Setengah piring', 'Seperempat', 'Seluruhnya', 'Sepersepuluh'], 0, 'Setengah piring buat sayur dan buah.'),
+           K('Batas garam per orang per hari versi Kemenkes?', ['5 g atau 1 sendok teh', '50 g', '1 sendok makan penuh', 'Ga ada batas'], 0, 'Gula 50 g, garam 5 g, lemak 67 g per hari.')] },
+  { id: 'napas', topik: 'Pikiran', judul: 'Napas pelan, badan tenang', menit: 2,
+    kartu: [
+      ['Kenapa napas?', '<p>Napas pelan dengan <b>buang napas lebih panjang</b> dari tarik napas bisa bantu badan pindah ke mode tenang. Gampang dicoba di mana aja, cukup 1 sampai 2 menit.</p>'],
+      ['Kapan perlu bantuan', '<p>Kalau sedih, cemas, atau kosong <b>lebih dari 2 minggu</b> dan mulai ganggu kuliah, kerja, atau tidur, ngobrol sama tenaga profesional.</p><p>Layanan Kemenkes Healing119: telepon <b>119 ekstensi 8</b> atau buka healing119.id. Gratis, 24 jam.</p>']
+    ],
+    soal: [K('Di latihan napas buat tenang, bagian mana yang dibikin lebih panjang?', ['Buang napas', 'Tarik napas', 'Tahan napas', 'Ga ada bedanya'], 0, 'Buang napas yang lebih panjang bantu badan lebih tenang.'),
+           K('Nomor layanan kesehatan jiwa Kemenkes?', ['119 ekstensi 8', '112', '110', '119 ekstensi 1'], 0, 'Healing119: 119 ekstensi 8, atau healing119.id.')] },
+  { id: 'kebiasaan', topik: 'Kebiasaan', judul: 'Kebiasaan butuh berapa lama?', menit: 3,
+    kartu: [
+      ['Bukan 21 hari', '<p>Studi Lally dkk. (2010) nemuin kebiasaan baru butuh rata-rata <b>66 hari</b> buat jadi otomatis. Rentangnya lebar, 18 sampai 254 hari.</p><p>Bolos sehari <b>ga ngerusak</b> prosesnya. Yang penting balik lagi besoknya.</p>'],
+      ['Trik yang kepake', '<ul><li><b>Mulai kecil banget.</b> 2 menit jalan lebih gampang dimulai daripada 30 menit.</li><li><b>Tempel ke kebiasaan lama.</b> "Abis sikat gigi pagi, aku minum segelas air."</li><li><b>Siapin lingkungannya.</b> Botol air di meja, sepatu di depan pintu.</li></ul>']
+    ],
+    soal: [K('Rata-rata berapa hari kebiasaan baru jadi otomatis menurut Lally dkk.?', ['66 hari', '7 hari', '21 hari pas', '1 tahun'], 0, 'Rata-ratanya 66 hari, rentang 18 sampai 254.'),
+           K('Kamu bolos olahraga sehari. Apa yang paling bener?', ['Lanjut lagi besok, bolos sehari ga ngerusak', 'Mulai dari nol lagi', 'Udah, gagal', 'Gandain porsinya besok'], 0, 'Satu hari kelewat ga ngaruh banyak ke pembentukan kebiasaan.'),
+           K('Contoh "tempel ke kebiasaan lama" yang pas?', ['Abis sikat gigi, minum segelas air', 'Mulai olahraga 2 jam tiap hari', 'Nunggu mood bagus', 'Pasang 10 alarm'], 0, 'Kebiasaan baru dikaitin sama yang udah rutin.')] },
+  { id: 'air', topik: 'Makan', judul: 'Minum berapa banyak?', menit: 2,
+    kartu: [
+      ['Beda tiap orang', '<p>Kebutuhan cairan tiap orang beda, tergantung berat badan, aktivitas, dan cuaca. Iklim tropis bikin keringat lebih banyak.</p><p>Patokan gampang: <b>warna urin kuning pucat</b> biasanya tanda minum udah cukup.</p>'],
+      ['Pilih airnya', '<p>Air putih paling aman. Minuman manis kemasan bisa nyumbang banyak gula, padahal batas gula harian cuma 50 g.</p>']
+    ],
+    soal: [K('Tanda gampang minum udah cukup?', ['Urin kuning pucat', 'Urin kuning pekat', 'Haus terus', 'Kepala pusing'], 0, 'Kuning pucat biasanya tanda cairan cukup.')] }
+];
+const BANK = PELAJARAN.flatMap(p => p.soal).concat([
+  K('Orang yang ngantuk berat di siang hari padahal udah tidur 8 jam sebaiknya...', ['Cek ke dokter', 'Tambah kopi', 'Abaikan', 'Tidur jam 3 pagi'], 0, 'Kantuk berat terus-terusan perlu dicek, bisa ada gangguan tidur.'),
+  K('Jalan cepat 30 menit, 5 hari seminggu, totalnya berapa menit?', ['150 menit', '100 menit', '300 menit', '60 menit'], 0, '30 × 5 = 150, pas dengan batas bawah WHO.'),
+  K('Di Isi Piringku, makanan pokok kira-kira berapa bagian dari setengah piring?', ['Sekitar 2/3', 'Sekitar 1/10', 'Seluruhnya', 'Sekitar 1/4'], 0, 'Makanan pokok 2/3, lauk pauk 1/3 dari setengah piring.'),
+  K('Batas gula per orang per hari versi Kemenkes?', ['50 g atau 4 sendok makan', '5 g', '200 g', '1 sendok teh'], 0, 'Gula 50 g (4 sdm) per hari.'),
+  K('Intensitas berat: berapa menit per minggu yang setara rekomendasi WHO?', ['75 sampai 150 menit', '10 sampai 20 menit', '400 menit', '1.000 menit'], 0, 'Aktivitas berat dihitung kira-kira dua kali lipat aktivitas sedang.'),
+  K('Mana yang ngebantu tidur lebih nyenyak?', ['Kamar gelap dan sejuk', 'Main game sampai ngantuk', 'Kopi jam 9 malam', 'Lampu terang'], 0, 'Gelap, sejuk, dan tenang bantu tidur.'),
+  K('Kenapa jam bangun lebih penting dijaga dari jam tidur?', ['Lebih gampang dikontrol dan ngatur jam biologis', 'Biar bisa begadang', 'Ga ada alasannya', 'Biar tidur siang lebih lama'], 0, 'Jam bangun tetap bantu jam biologis stabil.'),
+  K('Mana yang bukan contoh aktivitas intensitas sedang?', ['Rebahan nonton', 'Jalan cepat', 'Sepeda santai', 'Ngepel rumah'], 0, 'Rebahan itu duduk atau berbaring, bukan aktivitas.'),
+  K('Seberapa sering sebaiknya mecah duduk lama?', ['Tiap 30 sampai 60 menit', 'Sehari sekali', 'Seminggu sekali', 'Ga perlu'], 0, 'Berdiri dan jalan sebentar tiap 30 sampai 60 menit.'),
+  K('Layanan Healing119 bisa diakses lewat?', ['Telepon 119 ekstensi 8 atau healing119.id', 'Cuma datang ke kantor', 'Cuma lewat surat', 'Harus bayar dulu'], 0, 'Gratis, 24 jam, telepon atau situs.')
+]);
+
+/* ---------- komponen kuis (pelajaran dan harian) ---------- */
+function acak(arr, rnd = Math.random) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] } return a }
+function rng(seed) { let h = 2166136261; for (const c of String(seed)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) } return () => { h += 0x6D2B79F5; let t = h; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
+function soalHarian() {
+  const urut = acak(BANK, rng('habit-bank')); const n = urut.length; const mulai = (hariKe() * 5) % n;
+  return Array.from({ length: 5 }, (_, i) => urut[(mulai + i) % n]);
+}
+function mainKuis(el, langkah, opt) {
+  let i = 0, benar = 0;
+  const tampil = () => {
+    const l = langkah[i];
+    const strip = `<div class="prog-pel">${langkah.map((_, j) => `<i class="${j <= i ? 'on' : ''}"></i>`).join('')}</div>`;
+    if (l.tipe === 'info') {
+      el.innerHTML = `${strip}<div class="kartu info-kartu"><span class="label">${esc(opt.label)}</span><h2 style="margin-top:8px">${esc(l.judul)}</h2>${l.html}</div><div class="baris"><button class="btn utama" id="lanjut">Lanjut</button></div>`;
+      $('#lanjut', el).onclick = () => { i++; maju() };
+      return;
+    }
+    const ops = acak(l.ops.map((t, j) => ({ t, ok: j === l.b })));
+    el.innerHTML = `${strip}<div class="kartu tumpuk"><span class="label">Soal</span><p class="soal">${esc(l.q)}</p><div class="ops">${ops.map((o, j) => `<button class="op" data-j="${j}">${esc(o.t)}</button>`).join('')}</div><div id="umpan"></div></div>`;
+    $$('.op', el).forEach(b => b.onclick = () => {
+      const o = ops[+b.dataset.j];
+      $$('.op', el).forEach((x, j) => { x.disabled = true; if (ops[j].ok) x.classList.add('benar') });
+      if (o.ok) { benar++; bunyi(880, .14) } else { b.classList.add('salah'); bunyi(220, .2) }
+      $('#umpan', el).innerHTML = `<div class="umpan ${o.ok ? 'ok' : 'no'}"><b>${o.ok ? 'Bener.' : 'Belum pas.'}</b> ${esc(l.k)}</div><div class="baris" style="margin-top:12px"><button class="btn utama" id="lanjut">${i === langkah.length - 1 ? 'Liat hasil' : 'Lanjut'}</button></div>`;
+      $('#lanjut', el).onclick = () => { i++; maju() };
+    });
+  };
+  const maju = () => {
+    if (i < langkah.length) return tampil();
+    const total = langkah.filter(l => l.tipe !== 'info').length;
+    opt.selesai(benar, total);
+    el.innerHTML = `<div class="kartu tumpuk" style="text-align:center;justify-items:center"><span class="label">${esc(opt.label)}</span><p class="skor-besar">${benar}/${total}</p><h2>${benar === total ? 'Sempurna!' : benar >= total / 2 ? 'Mantap, dikit lagi.' : 'Coba ulang besok, pasti naik.'}</h2><div class="baris" style="justify-content:center"><a class="btn utama" href="${opt.balik}">${opt.balikTeks}</a><a class="btn garis" href="#beranda">Ke beranda</a></div></div>`;
+    bunyi(660, .1); setTimeout(() => bunyi(990, .16), 120);
+  };
+  tampil();
+}
+
+/* ---------- ikon kecil ---------- */
+const IK = {
+  napas: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7"/></svg>',
+  tidur: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+  piring: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M12 12h9"/></svg>',
+  gerak: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4.5" r="1.8"/><path d="M8 21l3-6 3 2v4M6 12l3-3 4 1 3 3 3 1M11 15l2-5"/></svg>',
+  mood: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1.8 2 5.2 2 7 0M9 9.5h.01M15 9.5h.01"/></svg>',
+  kuis: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+  cek: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+/* ---------- halaman ---------- */
+const H = {};
+
+H.beranda = () => {
+  const k = tgl(); const c = cekHari(); const n = jumlahBeres();
+  const R = 62, KEL = 2 * Math.PI * R;
+  const airN = S.air[k] || 0;
+  const minggu = Array.from({ length: 7 }, (_, j) => { const d = geser(j - 6); const kk = tglDari(d); return { d, n: jumlahBeres(kk), ini: j === 6 } });
+  const sapa = (() => { const h = new Date().getHours(); return h < 11 ? 'Pagi' : h < 15 ? 'Siang' : h < 18 ? 'Sore' : 'Malam' })();
+  const totalMenit = Array.from({ length: 7 }, (_, j) => S.menit[tglDari(geser(-j))] || 0).reduce((a, b) => a + b, 0);
+  const harianSkor = S.harian[k];
+  hal.innerHTML = `
+  <div class="tumpuk">
+    ${S.contoh ? `<div class="banner"><span><b>Data contoh.</b> Riwayat 6 hari ke belakang diisi otomatis biar keliatan cara kerjanya.</span><span class="spasi"></span><button class="btn garis kecil-btn" id="nol">Mulai dari nol</button></div>` : ''}
+    <div class="judul-hal"><span class="label">${NAMA_HARI[new Date().getDay()]}, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long' })}</span><h1>${sapa}. Satu kebiasaan kecil dulu.</h1></div>
+    <div class="dua">
+      <section class="kartu">
+        <div class="hari">
+          <div class="ring" role="img" aria-label="${n} dari 5 kebiasaan beres hari ini">
+            <svg viewBox="0 0 148 148"><circle cx="74" cy="74" r="${R}" fill="none" stroke="var(--garis-ui)" stroke-width="14"/><circle class="isi-ring" cx="74" cy="74" r="${R}" fill="none" stroke="var(--merek-isi)" stroke-width="14" stroke-linecap="round" stroke-dasharray="${KEL}" stroke-dashoffset="${KEL * (1 - n / 5)}"/></svg>
+            <div class="tengah"><b class="angka">${n}/5</b><span class="kecil redup">beres hari ini</span></div>
+          </div>
+          <div class="tumpuk" style="gap:10px">
+            <div class="streak"><b class="angka">${streak()}</b><span class="redup">hari beruntun<br><span class="kecil">(minimal 3 kebiasaan sehari)</span></span></div>
+            <div class="minggu" aria-label="7 hari terakhir">${minggu.map(m => `<div class="h ${m.ini ? 'ini' : ''}"><div class="bl" title="${m.n}/5"><i style="height:${m.n / 5 * 100}%"></i></div>${NAMA_HARI[m.d.getDay()]}</div>`).join('')}</div>
+          </div>
+        </div>
+        <div class="cek-list">
+          ${KEBIASAAN.map(h => `<div class="cek"><button class="cek-b" data-id="${h.id}" aria-pressed="${!!c[h.id]}"><span class="kotak">${c[h.id] ? IK.cek : ''}</span><span><span class="nama">${h.nama}</span><span class="sub">${h.id === 'air' ? `${airN} dari ${S.airTarget} gelas` : h.id === 'gerak' ? `${S.menit[k] || 0} menit hari ini` : h.sub}</span></span></button>${h.id === 'air' ? `<button class="tautan" data-air="1">+1 gelas</button>` : `<a class="tautan" href="#${h.ke}">Buka</a>`}</div>`).join('')}
+        </div>
+      </section>
+      <section class="tumpuk">
+        <div class="kartu tumpuk" style="gap:10px">
+          <span class="label">Gerak minggu ini</span>
+          <div class="streak"><b class="angka">${totalMenit}</b><span class="redup">dari 150 menit (7 hari terakhir)</span></div>
+          <div class="bar"><i style="width:${Math.min(100, totalMenit / 150 * 100)}%"></i></div>
+          <p class="kecil redup">Target WHO buat dewasa: 150 sampai 300 menit intensitas sedang seminggu.</p>
+        </div>
+        <a class="kartu alat" href="#harian" style="border-radius:20px">
+          <span class="ik">${IK.kuis}</span><b>Kuis harian</b>
+          <span>${harianSkor != null ? `Udah dikerjain hari ini: ${harianSkor}/5. Soal baru besok.` : '5 soal baru tiap hari, ga ada yang sama kayak kemarin.'}</span>
+        </a>
+      </section>
+    </div>
+    <h2 style="font-size:22px;margin-top:8px">Alat</h2>
+    <div class="alat-grid">
+      <a class="alat" href="#napas"><span class="ik">${IK.napas}</span><b>Latihan napas</b><span>Lingkaran ngembang dan ngempis, tinggal ikutin.</span></a>
+      <a class="alat" href="#tidur"><span class="ik">${IK.tidur}</span><b>Jam tidur</b><span>Mau bangun jam segini, tidur jam berapa?</span></a>
+      <a class="alat" href="#piring"><span class="ik">${IK.piring}</span><b>Isi Piringku</b><span>Susun piring makanmu, liat seberapa pas.</span></a>
+      <a class="alat" href="#gerak"><span class="ik">${IK.gerak}</span><b>Gerak 5 menit</b><span>8 gerakan tanpa alat, ada timernya.</span></a>
+      <a class="alat" href="#mood"><span class="ik">${IK.mood}</span><b>Cek mood</b><span>Satu ketukan sehari, liat polanya seminggu.</span></a>
+      <a class="alat" href="#belajar"><span class="ik">${IK.kuis}</span><b>Belajar</b><span>${PELAJARAN.length} pelajaran singkat, 2 sampai 3 menit.</span></a>
+    </div>
+  </div>`;
+  $$('.cek-b').forEach(b => b.onclick = () => {
+    const id = b.dataset.id; const v = !cekHari()[id]; tandai(id, v); if (v) bunyi(780, .12); H.beranda();
+  });
+  $$('[data-air]').forEach(a => a.onclick = () => {
+    S.air[k] = (S.air[k] || 0) + 1; if (S.air[k] >= S.airTarget) cekHari().air = true; simpan(); bunyi(520, .1); H.beranda();
+  });
+  const nol = $('#nol'); if (nol) nol.onclick = () => { S = kosong(); simpan(); H.beranda() };
+};
+
+let napasJalan = null;
+H.napas = () => {
+  const POLA = {
+    tenang: { nama: 'Tenang 4-6', fase: [['Tarik', 4], ['Buang', 6]], ket: 'Buang napas lebih panjang. Cocok buat sebelum tidur.' },
+    kotak: { nama: 'Kotak 4-4-4-4', fase: [['Tarik', 4], ['Tahan', 4], ['Buang', 4], ['Tahan', 4]], ket: 'Ritme rata. Cocok buat fokus sebelum presentasi.' },
+    rileks: { nama: 'Rileks 4-7-8', fase: [['Tarik', 4], ['Tahan', 7], ['Buang', 8]], ket: 'Tahan cukup lama. Kalau pusing, pindah ke pola Tenang.' }
+  };
+  let pilih = 'tenang';
+  hal.innerHTML = `
+  <div class="tumpuk">
+    <div class="judul-hal"><span class="label">Alat</span><h1>Latihan napas</h1><p>Ikutin lingkarannya. Ngembang pas tarik napas, ngempis pas buang. 2 menit udah cukup buat ngecentang kebiasaan hari ini.</p></div>
+    <div class="dua">
+      <div class="kartu tumpuk">
+        <div class="napas-panggung"><div class="lingkar" id="lk"><span id="lk-t">Siap?</span></div></div>
+        <div class="napas-info"><span>Waktu <b id="nw" class="angka">0:00</b></span><span>Putaran <b id="np" class="angka">0</b></span></div>
+        <div class="baris" style="justify-content:center"><button class="btn merek" id="mulai">Mulai</button></div>
+      </div>
+      <div class="kartu tumpuk">
+        <span class="label">Pola</span>
+        <div class="baris" id="pola">${Object.entries(POLA).map(([k, p]) => `<button class="chip" data-p="${k}" aria-pressed="${k === pilih}">${p.nama}</button>`).join('')}</div>
+        <p id="ket" class="redup">${POLA[pilih].ket}</p>
+        <p class="kecil redup">Napas lewat hidung kalau bisa. Berhenti kalau pusing atau sesak.</p>
+      </div>
+    </div>
+  </div>`;
+  const lk = $('#lk'), lt = $('#lk-t');
+  const stop = () => { if (napasJalan) { clearTimeout(napasJalan.t); clearInterval(napasJalan.jam); napasJalan = null } $('#mulai') && ($('#mulai').textContent = 'Mulai') };
+  $$('#pola .chip').forEach(b => b.onclick = () => { pilih = b.dataset.p; $$('#pola .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#ket').textContent = POLA[pilih].ket; stop(); lk.style.transition = 'transform .6s'; lk.style.transform = 'scale(.5)'; lt.textContent = 'Siap?' });
+  $('#mulai').onclick = () => {
+    if (napasJalan) { stop(); lt.textContent = 'Jeda'; return }
+    $('#mulai').textContent = 'Berhenti';
+    const pola = POLA[pilih].fase; let f = 0, putaran = 0; const t0 = Date.now(); let tercentang = false;
+    napasJalan = { jam: setInterval(() => {
+      const s = Math.floor((Date.now() - t0) / 1000); $('#nw').textContent = `${Math.floor(s / 60)}:${pad(s % 60)}`;
+      if (s >= 120 && !tercentang) { tercentang = true; tandai('napas'); bunyi(990, .2); lt.textContent = '2 menit ✓' }
+    }, 250) };
+    const langkah = () => {
+      if (!napasJalan) return;
+      const [nama, dtk] = pola[f];
+      lt.textContent = `${nama} ${dtk}`;
+      const skala = nama === 'Tarik' ? 1 : nama === 'Buang' ? .5 : null;
+      if (skala != null) { lk.style.transition = `transform ${dtk}s cubic-bezier(.45,.05,.55,.95)`; lk.style.transform = `scale(${skala})` }
+      bunyi(nama === 'Tarik' ? 523 : nama === 'Buang' ? 392 : 440, .08, .08);
+      f = (f + 1) % pola.length; if (f === 0) { putaran++; setTimeout(() => { const e = $('#np'); if (e) e.textContent = putaran }, dtk * 1000) }
+      napasJalan.t = setTimeout(langkah, dtk * 1000);
+    };
+    langkah();
+  };
+  return stop;
+};
+
+H.tidur = () => {
+  let mode = 'bangun';
+  hal.innerHTML = `
+  <div class="tumpuk">
+    <div class="judul-hal"><span class="label">Alat</span><h1>Jam tidur</h1><p>Tidur jalan dalam siklus kira-kira 90 menit. Bangun di akhir siklus biasanya terasa lebih seger. Hitungan ini udah nambah 15 menit buat nunggu ngantuk.</p></div>
+    <div class="dua">
+      <div class="kartu tumpuk">
+        <div class="baris"><button class="chip" data-m="bangun" aria-pressed="true">Aku mau bangun jam</button><button class="chip" data-m="sekarang" aria-pressed="false">Aku tidur sekarang</button></div>
+        <div id="input-wrap"><label class="label" for="jam">Jam bangun</label><br><input class="waktu-in angka" type="time" id="jam" value="06:00" style="margin-top:8px"></div>
+        <div class="opsi-tidur" id="opsi"></div>
+      </div>
+      <div class="kartu tumpuk">
+        <span class="label">Udah tidur cukup semalam?</span>
+        <p>Dewasa butuh <b>minimal 7 jam</b>. Opsi yang dihijauin di samping udah lewat 7 jam.</p>
+        <button class="btn ${cekHari().tidur ? 'garis' : 'merek'}" id="cek-tidur">${cekHari().tidur ? 'Udah dicentang hari ini' : 'Centang: semalam tidur ≥7 jam'}</button>
+        <p class="kecil redup">Siklus 90 menit itu rata-rata. Aslinya bisa 70 sampai 120 menit, jadi anggap ini kisaran.</p>
+      </div>
+    </div>
+  </div>`;
+  const fmt = d => `${pad(d.getHours())}.${pad(d.getMinutes())}`;
+  const hitung = () => {
+    const out = [];
+    if (mode === 'bangun') {
+      const [h, m] = ($('#jam').value || '06:00').split(':').map(Number);
+      const bangun = new Date(); bangun.setHours(h, m, 0, 0);
+      for (const c of [6, 5, 4]) { const d = new Date(bangun - (c * 90 + 15) * 60000); out.push({ jam: fmt(d), c, ket: 'tidur jam' }) }
+    } else {
+      const now = new Date();
+      for (const c of [4, 5, 6]) { const d = new Date(+now + (c * 90 + 15) * 60000); out.push({ jam: fmt(d), c, ket: 'bangun jam' }) }
+    }
+    $('#opsi').innerHTML = out.map(o => { const jamT = o.c * 1.5; const ok = jamT >= 7; return `<div class="ot ${ok ? 'saran' : ''}"><b>${o.jam}</b><div><div class="siklus">${'<i></i>'.repeat(o.c)}</div><span class="kecil redup">${o.ket} · ${o.c} siklus · ${String(jamT).replace('.', ',')} jam tidur</span></div><span class="tag">${ok ? '≥7 jam' : 'kurang'}</span></div>` }).join('');
+  };
+  $$('[data-m]').forEach(b => b.onclick = () => { mode = b.dataset.m; $$('[data-m]').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#input-wrap').hidden = mode !== 'bangun'; hitung() });
+  $('#jam').oninput = hitung;
+  $('#cek-tidur').onclick = () => { tandai('tidur', !cekHari().tidur); bunyi(780, .12); H.tidur() };
+  hitung();
+};
+
+H.piring = () => {
+  const KAT = [
+    { id: 'pokok', nama: 'Makanan pokok', contoh: 'nasi, kentang, roti', warna: 'var(--c-pokok)', ideal: 1 / 3 },
+    { id: 'lauk', nama: 'Lauk pauk', contoh: 'tempe, ikan, telur, ayam', warna: 'var(--c-lauk)', ideal: 1 / 6 },
+    { id: 'sayur', nama: 'Sayur', contoh: 'bayam, wortel, kangkung', warna: 'var(--c-sayur)', ideal: 1 / 3 },
+    { id: 'buah', nama: 'Buah', contoh: 'pisang, pepaya, jeruk', warna: 'var(--c-buah)', ideal: 1 / 6 }
+  ];
+  const PRESET = {
+    'Nasi padang biasa': { pokok: 5, lauk: 3, sayur: 1, buah: 0 },
+    'Mie instan + telur': { pokok: 5, lauk: 1, sayur: 0, buah: 0 },
+    'Pecel + tempe + pisang': { pokok: 3, lauk: 2, sayur: 3, buah: 1 },
+    'Ideal Isi Piringku': { pokok: 4, lauk: 2, sayur: 4, buah: 2 }
+  };
+  let v = { ...PRESET['Nasi padang biasa'] };
+  hal.innerHTML = `
+  <div class="tumpuk">
+    <div class="judul-hal"><span class="label">Alat</span><h1>Isi Piringku</h1><p>Geser porsinya, liat piring kamu sedekat apa sama pedoman Kemenkes: setengah piring sayur dan buah, setengah lagi makanan pokok dan lauk.</p></div>
+    <div class="kartu tumpuk">
+      <div class="baris" id="preset">${Object.keys(PRESET).map((p, i) => `<button class="chip" data-p="${p}" aria-pressed="${i === 0}">${p}</button>`).join('')}</div>
+      <div class="piring-wrap">
+        <svg class="piring" id="pr" viewBox="-110 -110 220 220" role="img" aria-label="Piring makan"></svg>
+        <div class="slider-list">
+          ${KAT.map(k => `<div class="sl"><label for="s-${k.id}"><span><i style="background:${k.warna}"></i>${k.nama} <span class="redup kecil">(${k.contoh})</span></span><span class="angka" id="v-${k.id}"></span></label><input type="range" id="s-${k.id}" min="0" max="6" step="1"></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="dua">
+      <div class="kartu tumpuk" style="gap:8px"><span class="label">Kecocokan</span><p class="skor-besar angka" id="skor"></p><p id="saran"></p></div>
+      <div class="kartu tumpuk" style="gap:12px"><span class="label">Patokan Kemenkes</span>
+        <svg class="piring" viewBox="-110 -110 220 220" style="max-width:150px" id="pr-ideal" role="img" aria-label="Piring ideal Isi Piringku"></svg>
+        <div class="legenda">${KAT.map(k => `<span><i style="background:${k.warna}"></i>${k.nama} ${Math.round(k.ideal * 100)}%</span>`).join('')}</div>
+        <button class="btn ${cekHari().piring ? 'garis' : 'merek'}" id="cek-piring">${cekHari().piring ? 'Udah dicentang hari ini' : 'Centang: aku makan ala Isi Piringku'}</button>
+      </div>
+    </div>
+  </div>`;
+  const gambar = (svg, porsi) => {
+    const tot = KAT.reduce((a, k) => a + porsi[k.id], 0);
+    let s = `<circle r="106" fill="var(--panel-2)" stroke="var(--garis-kuat)" stroke-width="2"/><circle r="92" fill="var(--panel)" stroke="var(--garis-ui)" stroke-width="1.5"/>`;
+    if (!tot) { svg.innerHTML = s + `<text y="5" text-anchor="middle" fill="var(--redup)" font-size="13">piring kosong</text>`; return }
+    let a0 = -Math.PI / 2;
+    KAT.forEach(k => {
+      const fr = porsi[k.id] / tot; if (!fr) return;
+      if (fr >= .999) { s += `<circle r="88" fill="${k.warna}"/>`; return }
+      const a1 = a0 + fr * 2 * Math.PI; const r = 88; const big = fr > .5 ? 1 : 0;
+      s += `<path d="M0 0 L${(r * Math.cos(a0)).toFixed(2)} ${(r * Math.sin(a0)).toFixed(2)} A${r} ${r} 0 ${big} 1 ${(r * Math.cos(a1)).toFixed(2)} ${(r * Math.sin(a1)).toFixed(2)} Z" fill="${k.warna}" stroke="var(--panel)" stroke-width="2.5"/>`;
+      a0 = a1;
+    });
+    svg.innerHTML = s;
+  };
+  const segar = () => {
+    KAT.forEach(k => { $(`#s-${k.id}`).value = v[k.id]; $(`#v-${k.id}`).textContent = `${v[k.id]} porsi` });
+    gambar($('#pr'), v);
+    const tot = KAT.reduce((a, k) => a + v[k.id], 0);
+    let skor = 0, saran = 'Tambahin isi piringnya dulu.';
+    if (tot) {
+      const beda = KAT.reduce((a, k) => a + Math.abs(v[k.id] / tot - k.ideal), 0);
+      skor = Math.max(0, Math.round(100 - beda * 100));
+      const kurang = KAT.map(k => ({ k, d: v[k.id] / tot - k.ideal })).sort((a, b) => a.d - b.d);
+      const lebih = kurang[kurang.length - 1];
+      saran = skor >= 90 ? 'Udah pas banget sama Isi Piringku.' : `Paling kurang: <b>${kurang[0].k.nama.toLowerCase()}</b>. Paling kebanyakan: <b>${lebih.k.nama.toLowerCase()}</b>. Coba tukar satu porsi.`;
+    }
+    $('#skor').textContent = `${skor}%`; $('#saran').innerHTML = saran;
+  };
+  KAT.forEach(k => $(`#s-${k.id}`).oninput = (e) => { v[k.id] = +e.target.value; $$('#preset .chip').forEach(x => x.setAttribute('aria-pressed', 'false')); segar() });
+  $$('#preset .chip').forEach(b => b.onclick = () => { v = { ...PRESET[b.dataset.p] }; $$('#preset .chip').forEach(x => x.setAttribute('aria-pressed', x === b)); segar(); bunyi(600, .08) });
+  $('#cek-piring').onclick = () => { tandai('piring', !cekHari().piring); bunyi(780, .12); H.piring() };
+  gambar($('#pr-ideal'), { pokok: 2, lauk: 1, sayur: 2, buah: 1 });
+  segar();
+};
+
+let gerakJalan = null;
+H.gerak = () => {
+  const G = [
+    ['Jalan di tempat, lutut tinggi', 'Pemanasan. Ayun tangan.'],
+    ['Squat', 'Pinggul mundur kayak mau duduk, lutut searah jari kaki.'],
+    ['Push-up dinding', 'Tangan di tembok setinggi bahu, badan lurus.'],
+    ['Jumping jack', 'Ganti jadi langkah ke samping kalau lantai berisik.'],
+    ['Glute bridge', 'Tiduran, angkat pinggul, tahan sebentar di atas.'],
+    ['Lunge bergantian', 'Langkah maju, turunin lutut belakang pelan.'],
+    ['Plank', 'Tumpuan siku. Lutut di lantai juga boleh.'],
+    ['Peregangan', 'Tarik napas panjang, regangin bahu dan paha.']
+  ];
+  const KERJA = 30, JEDA = 10;
+  const k = tgl(); const totalMenit = Array.from({ length: 7 }, (_, j) => S.menit[tglDari(geser(-j))] || 0).reduce((a, b) => a + b, 0);
+  hal.innerHTML = `
+  <div class="tumpuk">
+    <div class="judul-hal"><span class="label">Alat</span><h1>Gerak 5 menit</h1><p>8 gerakan tanpa alat, masing-masing 30 detik kerja dan 10 detik jeda. Pelan-pelan aja, yang penting gerak.</p></div>
+    <div class="dua">
+      <div class="kartu tumpuk" style="justify-items:center">
+        <span class="label" id="g-status">Siap</span>
+        <p class="gerakan-nama" id="g-nama">${G[0][0]}</p>
+        <p class="timer-besar" id="g-waktu">0:${KERJA}</p>
+        <div class="bar" style="width:100%"><i id="g-bar" style="width:0%"></i></div>
+        <div class="baris"><button class="btn merek" id="g-mulai">Mulai</button><button class="btn garis" id="g-lewat">Lewati</button></div>
+      </div>
+      <div class="tumpuk">
+        <div class="kartu"><ol class="urutan" id="g-list">${G.map((g, i) => `<li class="${i === 0 ? 'aktif' : ''}"><span><b>${g[0]}</b><small>${g[1]}</small></span></li>`).join('')}</ol></div>
+        <div class="kartu tumpuk" style="gap:10px">
+          <span class="label">Catat gerak lain hari ini</span>
+          <p>Hari ini: <b class="angka" id="m-hari">${S.menit[k] || 0}</b> menit · 7 hari: <b class="angka" id="m-7">${totalMenit}</b>/150</p>
+          <div class="baris">${[10, 20, 30].map(m => `<button class="btn garis kecil-btn" data-m="${m}">+${m} menit</button>`).join('')}</div>
+          <p class="kecil redup">Jalan kaki, sepeda, futsal, beres-beres rumah. Kalau udah 30 menit, kebiasaan "Gerak" otomatis kecentang.</p>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  const catat = (m) => {
+    S.menit[k] = (S.menit[k] || 0) + m; if (S.menit[k] >= 30) cekHari().gerak = true; simpan();
+    $('#m-hari').textContent = S.menit[k];
+    $('#m-7').textContent = Array.from({ length: 7 }, (_, j) => S.menit[tglDari(geser(-j))] || 0).reduce((a, b) => a + b, 0);
+  };
+  $$('[data-m]').forEach(b => b.onclick = () => { catat(+b.dataset.m); bunyi(700, .1) });
+  let idx = 0, fase = 'kerja', sisa = KERJA, akhir = 0;
+  const stop = () => { if (gerakJalan) { clearInterval(gerakJalan); gerakJalan = null } };
+  const render = () => {
+    $('#g-nama').textContent = fase === 'jeda' ? `Berikutnya: ${G[idx][0]}` : G[idx][0];
+    $('#g-status').textContent = fase === 'jeda' ? 'Jeda' : `Gerakan ${idx + 1} dari ${G.length}`;
+    $('#g-waktu').textContent = `0:${pad(Math.max(0, Math.ceil(sisa)))}`;
+    $('#g-bar').style.width = `${((idx + (fase === 'kerja' ? 1 - sisa / KERJA : 0)) / G.length) * 100}%`;
+    $$('#g-list li').forEach((li, i) => li.classList.toggle('aktif', i === idx));
+  };
+  const lanjut = () => {
+    if (fase === 'kerja') {
+      if (idx === G.length - 1) { stop(); catat(5); $('#g-status').textContent = 'Beres'; $('#g-nama').textContent = 'Mantap, 5 menit kecatat.'; $('#g-waktu').textContent = '✓'; $('#g-bar').style.width = '100%'; $('#g-mulai').textContent = 'Ulang'; bunyi(660, .12); setTimeout(() => bunyi(990, .2), 140); idx = 0; fase = 'kerja'; sisa = KERJA; return }
+      fase = 'jeda'; sisa = JEDA; idx++; bunyi(440, .15);
+    } else { fase = 'kerja'; sisa = KERJA; bunyi(880, .15) }
+    akhir = Date.now() + sisa * 1000; render();
+  };
+  $('#g-mulai').onclick = () => {
+    if (gerakJalan) { stop(); $('#g-mulai').textContent = 'Lanjut'; return }
+    $('#g-mulai').textContent = 'Jeda'; akhir = Date.now() + sisa * 1000; bunyi(880, .15);
+    gerakJalan = setInterval(() => { sisa = (akhir - Date.now()) / 1000; if (sisa <= 3.05 && sisa > 2.8) bunyi(600, .05, .08); if (sisa <= 0) lanjut(); else render() }, 100);
+    render();
+  };
+  $('#g-lewat').onclick = () => { if (!gerakJalan) akhir = Date.now() + sisa * 1000; lanjut() };
+  return stop;
+};
+
+H.mood = () => {
+  const k = tgl(); const ini = S.mood[k] || {};
+  const MUKA = [
+    { v: 1, n: 'Berat', m: 'M8 16.5c2-2 6-2 8 0' }, { v: 2, n: 'Kurang', m: 'M8.5 15.5c1.8-1 5.2-1 7 0' },
+    { v: 3, n: 'Biasa', m: 'M8.5 15h7' }, { v: 4, n: 'Oke', m: 'M8.5 14.5c1.8 1.4 5.2 1.4 7 0' }, { v: 5, n: 'Seneng', m: 'M8 14c2 3 6 3 8 0' }
+  ];
+  const svgMuka = m => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M9 9.5h.01M15 9.5h.01" stroke-width="2.6"/><path d="${m}"/></svg>`;
+  const hari = Array.from({ length: 14 }, (_, j) => { const d = geser(j - 13); return { d, v: (S.mood[tglDari(d)] || {}).v || 0 } });
+  const W = 560, Ht = 130, px = i => 20 + i * (W - 40) / 13, py = v => Ht - 18 - (v - 1) * (Ht - 36) / 4;
+  const titik = hari.filter(h => h.v);
+  const garis = hari.map((h, i) => h.v ? `${px(i)},${py(h.v)}` : null);
+  let path = ''; garis.forEach((p, i) => { if (!p) return; path += (i && garis[i - 1] ? 'L' : 'M') + p + ' ' });
+  hal.innerHTML = `
+  <div class="tumpuk">
+    <div class="judul-hal"><span class="label">Alat</span><h1>Cek mood</h1><p>Satu ketukan sehari. Ga ada jawaban salah. Polanya baru keliatan setelah seminggu.</p></div>
+    <div class="dua">
+      <div class="kartu tumpuk">
+        <span class="label">Hari ini rasanya</span>
+        <div class="wajah">${MUKA.map(m => `<button data-v="${m.v}" aria-pressed="${ini.v === m.v}">${svgMuka(m.m)}${m.n}</button>`).join('')}</div>
+        <label class="label" for="catatan">Catatan (opsional, cuma kesimpen di HP ini)</label>
+        <textarea id="catatan" placeholder="Apa yang paling ngaruh ke mood hari ini?">${esc(ini.c || '')}</textarea>
+        <div class="baris"><button class="btn merek" id="simpan-mood">Simpan</button><span class="kecil redup" id="ok-mood"></span></div>
+      </div>
+      <div class="tumpuk">
+        <div class="kartu tumpuk" style="gap:8px">
+          <span class="label">14 hari terakhir</span>
+          <div style="overflow-x:auto"><svg class="grafik-mood" viewBox="0 0 ${W} ${Ht}" preserveAspectRatio="none" role="img" aria-label="Grafik mood 14 hari">
+            ${[1, 3, 5].map(v => `<line x1="12" x2="${W - 12}" y1="${py(v)}" y2="${py(v)}" stroke="var(--garis-ui)" stroke-dasharray="3 4"/>`).join('')}
+            <path d="${path}" fill="none" stroke="var(--merek-isi)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+            ${titik.map(h => { const i = hari.indexOf(h); return `<circle cx="${px(i)}" cy="${py(h.v)}" r="5" fill="var(--panel)" stroke="var(--merek-isi)" stroke-width="2.5" vector-effect="non-scaling-stroke"/>` }).join('')}
+          </svg></div>
+          <div class="baris kecil redup" style="justify-content:space-between"><span>${hari[0].d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}</span><span>hari ini</span></div>
+        </div>
+        <div class="bantuan">
+          <span class="label">Lagi berat?</span>
+          <p>Kamu ga harus nanggung sendiri. Layanan konseling Kemenkes <b>Healing119</b> gratis dan buka 24 jam.</p>
+          <p class="nomor">119 ext. 8</p>
+          <p class="kecil">Atau buka <a href="https://healing119.id" target="_blank" rel="noopener">healing119.id</a>. Kalau ada bahaya langsung buat diri sendiri atau orang lain, segera ke IGD terdekat.</p>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  let pilih = ini.v || 0;
+  $$('.wajah button').forEach(b => b.onclick = () => { pilih = +b.dataset.v; $$('.wajah button').forEach(x => x.setAttribute('aria-pressed', x === b)); bunyi(400 + pilih * 90, .1) });
+  $('#simpan-mood').onclick = () => { if (!pilih) { $('#ok-mood').textContent = 'Pilih salah satu muka dulu.'; return } S.mood[k] = { v: pilih, c: $('#catatan').value.slice(0, 500) }; simpan(); bunyi(780, .12); H.mood(); $('#ok-mood').textContent = 'Kesimpen.' };
+};
+
+H.belajar = () => {
+  const topik = [...new Set(PELAJARAN.map(p => p.topik))];
+  hal.innerHTML = `
+  <div class="tumpuk">
+    <div class="judul-hal"><span class="label">Belajar</span><h1>Pelajaran singkat</h1><p>2 sampai 3 menit per pelajaran. Tiap angka di sini diambil dari WHO, Kemenkes, CDC, atau studi yang disebut di dalamnya.</p></div>
+    ${topik.map(t => `<section class="tumpuk" style="gap:10px"><h2 style="font-size:20px">${t}</h2><div class="pel-list">${PELAJARAN.filter(p => p.topik === t).map(p => { const s = S.pel[p.id]; return `<a class="pel ${s != null ? 'beres' : ''}" href="#p-${p.id}"><span class="no">${s != null ? IK.cek : PELAJARAN.indexOf(p) + 1}</span><span><b>${p.judul}</b><small>${p.menit} menit · ${p.soal.length} soal${s != null ? ` · skor ${s}/${p.soal.length}` : ''}</small></span><span class="redup">›</span></a>` }).join('')}</div></section>`).join('')}
+  </div>`;
+};
+
+H.pelajaran = (id) => {
+  const p = PELAJARAN.find(x => x.id === id); if (!p) return H.belajar();
+  hal.innerHTML = `<div class="pemutar" id="pm"></div>`;
+  const langkah = p.kartu.map(([judul, html]) => ({ tipe: 'info', judul, html })).concat(p.soal);
+  mainKuis($('#pm'), langkah, { label: `${p.topik} · ${p.judul}`, balik: '#belajar', balikTeks: 'Pelajaran lain', selesai: (b) => { S.pel[p.id] = Math.max(b, S.pel[p.id] || 0); simpan() } });
+};
+
+H.harian = () => {
+  const k = tgl();
+  hal.innerHTML = `<div class="tumpuk"><div class="judul-hal"><span class="label">Kuis harian · ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long' })}</span><h1>5 soal hari ini</h1><p>Soalnya ganti tiap hari dan ga ada yang sama kayak kemarin.${S.harian[k] != null ? ` Skor kamu hari ini: <b>${S.harian[k]}/5</b>. Boleh dicoba lagi.` : ''}</p></div><div class="pemutar" id="pm"></div></div>`;
+  mainKuis($('#pm'), soalHarian(), { label: 'Kuis harian', balik: '#belajar', balikTeks: 'Ke pelajaran', selesai: (b) => { S.harian[k] = Math.max(b, S.harian[k] || 0); simpan() } });
+};
+
+/* ---------- router ---------- */
+let bersih = null;
+function rute() {
+  if (typeof bersih === 'function') bersih(); bersih = null;
+  const h = (location.hash || '#beranda').slice(1);
+  const [a, b] = h.split('-');
+  const kunci = a === 'p' ? 'belajar' : (H[a] ? a : 'beranda');
+  $$('#nav a').forEach(x => x.getAttribute('href') === '#' + kunci ? x.setAttribute('aria-current', 'page') : x.removeAttribute('aria-current'));
+  bersih = a === 'p' ? H.pelajaran(b) : (H[a] || H.beranda)();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- tema ---------- */
+$('#tema').onclick = () => {
+  const root = document.documentElement;
+  const gelapSkrg = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme = gelapSkrg ? 'light' : 'dark';
+  try { localStorage.setItem('gahealth-tema', root.dataset.theme) } catch (e) {}
+};
+try { const t = localStorage.getItem('gahealth-tema'); if (t) document.documentElement.dataset.theme = t } catch (e) {}
+
+S = muat() || kosong();
+['cek', 'air', 'menit', 'mood', 'pel', 'harian'].forEach(x => S[x] ||= {}); S.airTarget ||= 8;
+addEventListener('hashchange', rute);
+rute();
+})();
+</script>
+
+</body>
+</html>
